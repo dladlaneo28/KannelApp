@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head><title>Breeding</title></head>
+<body style="font-family: sans-serif; margin: 40px;">
+    <a href="/">← Back</a>
+    <h1>⏳ Breeding Tracker</h1>
+
+    {% if current_user.is_authenticated %}
+    <form method="POST">
+        <input type="text" name="dam_name" placeholder="Dam">
+        <input type="text" name="sire_name" placeholder="Sire">
+        <input type="date" name="mating_date">
+        <button type="submit">Log Breeding</button>
+    </form>
+    {% endif %}
+
+    <ul>
+    {% for b in records %}
+        <li><strong>{{ b.dam_name }}</strong> x {{ b.sire_name }} | Due: <span style="color: red;">{{ b.due_date }}</span> ({{ b.status }})</li>
+    {% endfor %}
+    </ul>
+</body>
+</html>

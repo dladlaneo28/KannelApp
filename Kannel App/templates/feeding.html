@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head><title>Feeding & Age</title></head>
+<body style="font-family: sans-serif; margin: 40px; background: #f4fbf9;">
+    <a href="/">← Back</a>
+    <h1>🥣 Feeding & Age Manager</h1>
+
+    <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+        <h3>New Dog Profile</h3>
+        <form method="POST">
+            <input type="text" name="name" placeholder="Dog Name" required>
+            <input type="text" name="breed" placeholder="Breed">
+            <label style="margin-left: 10px;">Birth Date:</label>
+            <input type="date" name="birth_date" required>
+            <br><br>
+            <input type="text" name="food" placeholder="Food Brand/Type" required>
+            <input type="text" name="schedule" placeholder="Schedule (e.g. 7am, 6pm)" required>
+            <button type="submit" style="background: #16a085; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">Save Profile</button>
+        </form>
+    </div>
+
+    <table border="1" width="100%" style="margin-top: 30px; border-collapse: collapse;">
+        <tr style="background: #16a085; color: white;">
+            <th style="padding: 12px;">Name</th>
+            <th style="padding: 12px;">Age</th>
+            <th style="padding: 12px;">Food Type</th>
+            <th style="padding: 12px;">Schedule</th>
+        </tr>
+        {% for d in dogs %}
+        <tr>
+            <td style="padding: 12px;"><strong>{{ d.name }}</strong></td>
+            <td style="padding: 12px;">{{ d.get_age() }}</td>
+            <td style="padding: 12px;">{{ d.food_type }}</td>
+            <td style="padding: 12px;">{{ d.schedule }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <a href="/">← Back</a>
+    <h1>💰 Kennel Expenses</h1>
+    <h3>Total Spent: R {{ total }}</h3>
+    <form method="POST">
+        <input type="text" name="category" placeholder="Category">
+        <input type="text" name="description" placeholder="Item">
+        <input type="number" name="amount" placeholder="Amount">
+        <input type="date" name="date">
+        <button type="submit">Add Expense</button>
+    </form>
+    <hr>
+    {% for e in expenses %}
+        <p>{{ e.date }} - {{ e.description }}: <strong>R {{ e.amount }}</strong></p>
+    {% endfor %}
+</body>
+</html>

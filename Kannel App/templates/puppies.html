@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head><title>Puppies</title></head>
+<body style="font-family: sans-serif; margin: 40px;">
+    <a href="/">← Back</a>
+    <h1>🐾 Available Puppies</h1>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+        {% for pup in puppies %}
+        <div style="border: 1px solid #ddd; padding: 20px; border-radius: 10px; text-align: center;">
+            <h2>{{ pup.name }}</h2>
+            <p>{{ pup.gender }} {{ pup.breed }}</p>
+            {% if pup.is_available %}
+                <p style="color: green; font-weight: bold;">Available</p>
+                <a href="/reserve/{{ pup.id }}" style="background: #e67e22; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px;">Reserve Pup</a>
+            {% else %}
+                <p style="color: red;">Sold</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head><title>Sales & Applications</title></head>
+<body style="font-family: 'Segoe UI', sans-serif; margin: 40px; background: #fdfdfd;">
+    <a href="/">← Back to Dashboard</a>
+    <h1>🐾 Puppy Sales & Management</h1>
+
+    {% if not current_user.is_authenticated %}
+    <div style="background: #eef2f7; padding: 25px; border-radius: 12px; margin-bottom: 30px; border-left: 5px solid #3498db;">
+        <h3>Interested in a Puppy? Apply Here</h3>
+        <form method="POST">
+            <input type="text" name="client_name" placeholder="Your Full Name" required style="width:100%; margin-bottom:10px; padding:10px;">
+            <input type="text" name="pup_name" value="{{ request.args.get('pup_name', '') }}" placeholder="Puppy Name" required style="width:48%; padding:10px;">
+            <input type="text" name="breed" value="{{ request.args.get('breed', '') }}" placeholder="Breed" style="width:48%; padding:10px;">
+            <textarea name="message" placeholder="Tell us why you want this pup..." style="width:100%; margin-top:10px; height:80px; padding:10px;"></textarea>
+            <button type="submit" style="background:#3498db; color:white; border:none; padding:10px 20px; border-radius:5px; margin-top:10px; cursor:pointer;">Submit Interest</button>
+        </form>
+    </div>
+    {% endif %}
+
+    {% if current_user.is_authenticated %}
+    <div style="background: #fff9db; padding: 20px; border-radius: 12px; margin-bottom: 30px; border: 1px dashed #f1c40f;">
+        <h3>Pending Approval Requests</h3>
+        {% if not apps %} <p>No pending applications at the moment.</p> {% endif %}
+        {% for a in apps %}
+        <div style="background:white; padding:15px; margin-bottom:10px; border-radius:8px; border:1px solid #ddd; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <strong>{{ a.client_name }}</strong> wants <strong>{{ a.pup_interest }}</strong><br>
+                <small>"{{ a.message }}"</small>
+            </div>
+            <div>
+                <a href="/approve/{{ a.id }}/approve" style="background: #27ae60; color: white; padding: 5px 15px; text-decoration: none; border-radius: 4px; margin-right: 5px;">APPROVE</a>
+                <a href="/approve/{{ a.id }}/decline" style="background: #c0392b; color: white; padding: 5px 15px; text-decoration: none; border-radius: 4px;">DECLINE</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <details style="margin-bottom: 20px; color: #7f8c8d;">
+        <summary style="cursor:pointer;">Click to Add a Direct Sale (Manual)</summary>
+        <form method="POST" style="margin-top: 10px;">
+            <input type="text" name="client" placeholder="Client Name">
+            <input type="text" name="pup_name" placeholder="Pup Name">
+            <input type="text" name="breed" placeholder="Breed">
+            <input type="number" name="payment" placeholder="Amount Paid">
+            <input type="text" name="contract" placeholder="Contract #">
+            <button type="submit">Log Direct Sale</button>
+        </form>
+    </details>
+    {% endif %}
+
+    <hr>
+
+    <h3>Confirmed Placement Records</h3>
+    <table border="1" width="100%" style="border-collapse: collapse; text-align: left;">
+        <tr style="background: #2c3e50; color: white;">
+            <th style="padding:10px;">Client Name</th>
+            <th style="padding:10px;">Puppy Name</th>
+            {% if current_user.is_authenticated %}<th style="padding:10px;">Financials</th>{% endif %}
+        </tr>
+        {% for s in sales %}
+        <tr>
+            <td style="padding:10px;">{{ s.client }}</td>
+            <td style="padding:10px;">{{ s.pup_name }} ({{ s.breed }})</td>
+            {% if current_user.is_authenticated %}<td style="padding:10px;">R {{ s.payment }} [{{ s.contract }}]</td>{% endif %}
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
