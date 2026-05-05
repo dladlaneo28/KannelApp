@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart - Kannel App</title>
+    <style>
+        :root { --black: #0a0a0a; --red: #D32F2F; --silver: #C0C0C0; --white: #FFFFFF; --dark-gray: #1a1a1a; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--black); color: var(--white); }
+        .nav-bar { background: var(--dark-gray); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--red); }
+        .nav-bar h1 { margin: 0; font-size: 1.5rem; color: var(--silver); }
+        .nav-bar h1 span { color: var(--red); }
+        .nav-links a { color: var(--white); text-decoration: none; margin-left: 20px; font-weight: bold; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--red); }
+        .content { padding: 40px; max-width: 800px; margin: 0 auto; }
+        .cart-item { background: var(--dark-gray); border: 1px solid #333; padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .checkout-box { background: #111; border: 1px solid var(--red); padding: 20px; border-radius: 8px; margin-top: 20px; text-align: right; }
+        input[type="text"] { padding: 10px; border-radius: 5px; border: 1px solid #444; background: #222; color: white; width: 250px; margin-right: 10px; }
+        .btn { background: var(--red); color: white; border: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 1.1rem; }
+        .btn:hover { background: #b71c1c; }
+        .btn-secondary { background: #555; text-decoration: none; display: inline-block; padding: 10px 20px; border-radius: 5px; color: white; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <h1>Kannel <span>PetShop Cart</span></h1>
+        <div class="nav-links">
+            <a href="/petshop">← Keep Shopping</a>
+        </div>
+    </div>
+    
+    <div class="content">
+        <h2 style="color: var(--silver); border-bottom: 1px solid var(--red); padding-bottom: 10px;">Your Shopping Cart</h2>
+        
+        {% if not cart_items %}
+            <p>Your cart is currently empty.</p>
+            <a href="/petshop" class="btn-secondary">Browse Shop</a>
+        {% else %}
+            {% for item in cart_items %}
+                <div class="cart-item">
+                    <div>
+                        <h3 style="margin: 0; color: var(--red);">{{ item.product.name }}</h3>
+                        <p style="margin: 5px 0; color: #aaa;">Qty: {{ item.quantity }} x ${{ item.product.price }}</p>
+                    </div>
+                    <div style="font-size: 1.2rem; font-weight: bold; color: var(--silver);">
+                        ${{ item.subtotal }}
+                    </div>
+                </div>
+            {% endfor %}
+            
+            <div class="checkout-box">
+                <h3 style="margin-top: 0;">Total: <span style="color: var(--red);">${{ total }}</span></h3>
+                <form action="/petshop/cart" method="POST" style="display: flex; justify-content: flex-end; align-items: center; margin-top: 15px;">
+                    <a href="/petshop/cart/clear" style="color: #aaa; margin-right: 20px; text-decoration: none;">Clear Cart</a>
+                    <input type="text" name="client_name" placeholder="Enter Your Full Name" required>
+                    <button type="submit" class="btn">Confirm Checkout</button>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

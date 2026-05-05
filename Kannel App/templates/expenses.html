@@ -1,19 +1,56 @@
 <!DOCTYPE html>
 <html>
-<body>
-    <a href="/">← Back</a>
-    <h1>💰 Kennel Expenses</h1>
-    <h3>Total Spent: R {{ total }}</h3>
-    <form method="POST">
-        <input type="text" name="category" placeholder="Category">
-        <input type="text" name="description" placeholder="Item">
-        <input type="number" name="amount" placeholder="Amount">
-        <input type="date" name="date">
-        <button type="submit">Add Expense</button>
-    </form>
-    <hr>
-    {% for e in expenses %}
-        <p>{{ e.date }} - {{ e.description }}: <strong>R {{ e.amount }}</strong></p>
-    {% endfor %}
+<body style="font-family: 'Segoe UI', sans-serif; margin: 40px; background: #0a0a0a; color: #fff;">
+    <a href="/kennel" style="color: #C0C0C0; text-decoration: none;">← Back to Kennel Dashboard</a>
+    <h1 style="color: #fff; border-bottom: 2px solid #D32F2F; padding-bottom: 10px;">📊 Financial Board</h1>
+    
+    <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+        <div style="background: #1a1a1a; padding: 20px; border: 1px solid #444; border-radius: 8px; flex: 1; text-align: center;">
+            <h3 style="color: #C0C0C0; margin-top: 0;">Total Income</h3>
+            <h2 style="color: #27ae60; margin: 0;">R {{ total_inc }}</h2>
+        </div>
+        <div style="background: #1a1a1a; padding: 20px; border: 1px solid #444; border-radius: 8px; flex: 1; text-align: center;">
+            <h3 style="color: #C0C0C0; margin-top: 0;">Total Expenses</h3>
+            <h2 style="color: #D32F2F; margin: 0;">R {{ total_exp }}</h2>
+        </div>
+        <div style="background: #1a1a1a; padding: 20px; border: 2px solid {% if profit >= 0 %}#27ae60{% else %}#D32F2F{% endif %}; border-radius: 8px; flex: 1; text-align: center;">
+            <h3 style="color: #C0C0C0; margin-top: 0;">Net Profit</h3>
+            <h2 style="color: {% if profit >= 0 %}#27ae60{% else %}#D32F2F{% endif %}; margin: 0;">R {{ profit }}</h2>
+        </div>
+    </div>
+
+    <div style="background: #1a1a1a; padding: 20px; border: 1px solid #444; border-radius: 8px; margin-bottom: 20px;">
+        <h3 style="color: #D32F2F; margin-top: 0;">Log Manual Expense</h3>
+        <form method="POST">
+            <input type="text" name="category" placeholder="Category" style="background: #222; border: 1px solid #444; color: #fff; padding: 8px;">
+            <input type="text" name="description" placeholder="Item" style="background: #222; border: 1px solid #444; color: #fff; padding: 8px;">
+            <input type="number" step="0.01" name="amount" placeholder="Amount" style="background: #222; border: 1px solid #444; color: #fff; padding: 8px;">
+            <input type="date" name="date" style="background: #222; border: 1px solid #444; color: #fff; padding: 8px;">
+            <button type="submit" style="background: #D32F2F; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">Add Expense</button>
+        </form>
+    </div>
+    
+    <div style="display: flex; gap: 20px;">
+        <div style="flex: 1;">
+            <h3 style="color: #27ae60; border-bottom: 1px solid #444; padding-bottom: 10px;">Recent Income</h3>
+            {% for i in incomes %}
+                <p style="background: #111; padding: 10px; border-radius: 5px; border-left: 5px solid #27ae60;">
+                    <span style="color: #aaa;">{{ i.date.strftime('%Y-%m-%d') }}</span> - {{ i.source }}: <strong style="color: #27ae60; float: right;">R {{ i.amount }}</strong>
+                </p>
+            {% else %}
+                <p style="color: #aaa;">No income logged yet.</p>
+            {% endfor %}
+        </div>
+        <div style="flex: 1;">
+            <h3 style="color: #D32F2F; border-bottom: 1px solid #444; padding-bottom: 10px;">Recent Expenses</h3>
+            {% for e in expenses %}
+                <p style="background: #111; padding: 10px; border-radius: 5px; border-left: 5px solid #D32F2F;">
+                    <span style="color: #aaa;">{{ e.date }}</span> - {{ e.description }} ({{ e.category }}): <strong style="color: #D32F2F; float: right;">R {{ e.amount }}</strong>
+                </p>
+            {% else %}
+                <p style="color: #aaa;">No expenses logged yet.</p>
+            {% endfor %}
+        </div>
+    </div>
 </body>
 </html>

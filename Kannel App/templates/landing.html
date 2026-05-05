@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kannel App - Select Dashboard</title>
+    <style>
+        :root {
+            --black: #0a0a0a;
+            --red: #D32F2F;
+            --silver: #C0C0C0;
+            --white: #FFFFFF;
+            --dark-gray: #1a1a1a;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--black);
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .header {
+            padding: 2rem;
+            text-align: center;
+            background: linear-gradient(to bottom, var(--dark-gray), var(--black));
+            border-bottom: 2px solid var(--red);
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 3rem;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .header span {
+            color: var(--red);
+        }
+        .container {
+            display: flex;
+            flex: 1;
+            padding: 2rem;
+            gap: 2rem;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .card {
+            background-color: var(--dark-gray);
+            border: 2px solid var(--silver);
+            border-radius: 15px;
+            padding: 3rem 2rem;
+            width: 350px;
+            text-align: center;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--white);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 5px;
+            background-color: var(--red);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--red);
+            box-shadow: 0 15px 40px rgba(211, 47, 47, 0.2);
+        }
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+        .card h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--silver);
+        }
+        .card p {
+            color: #aaa;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 2rem;
+        }
+        .btn {
+            background-color: var(--red);
+            color: var(--white);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .card:hover .btn {
+            background-color: #b71c1c;
+        }
+        .admin-link {
+            text-align: center;
+            padding: 2rem;
+        }
+        .admin-link a {
+            color: var(--silver);
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+        .admin-link a:hover {
+            color: var(--red);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Kannel <span>App</span></h1>
+        <p>Premium Canine Services</p>
+    </div>
+    
+    <div class="container">
+        <a href="/kennel" class="card">
+            <h2>Kennel Dashboard</h2>
+            <p>Browse our pedigree parents, reserve champion puppies, and manage your breeding needs.</p>
+            <div class="btn">Enter Kennel</div>
+        </a>
+        
+        <a href="/petshop" class="card">
+            <h2>PetShop Dashboard</h2>
+            <p>Shop premium dog utilities, food, accessories, and toys for your furry friend.</p>
+            <div class="btn">Enter PetShop</div>
+        </a>
+    </div>
+
+    <div class="admin-link">
+        {% if current_user.is_superuser %}
+            <span>Admin: <strong>{{ current_user.username }}</strong></span> | <a href="/logout" style="color:var(--red);">Logout</a>
+        {% elif current_user.is_authenticated %}
+            <span>User: <strong>{{ current_user.username }}</strong></span> | <a href="/logout" style="color:var(--red);">Logout</a>
+        {% else %}
+            <a href="/login">User / Admin Login</a>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register - Kannel App</title>
+</head>
+<body style="font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #0a0a0a; color: #fff; margin: 0;">
+    <div class="login-box" style="background: #1a1a1a; padding: 40px; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 2px solid #C0C0C0; width: 300px; text-align: center;">
+        <h2 style="color: #D32F2F; margin-top: 0;">Register</h2>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div style="background: {% if category == 'error' %}#D32F2F{% else %}#27ae60{% endif %}; color: white; padding: 10px; margin-bottom: 15px; border-radius: 5px; font-size: 0.9rem;">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+            <input type="text" name="username" placeholder="Choose Username" required style="display: block; width: 100%; box-sizing: border-box; margin-bottom: 15px; padding: 10px; border: 1px solid #444; background: #222; color: #fff; border-radius: 5px;">
+            <input type="password" name="password" placeholder="Choose Password" required style="display: block; width: 100%; box-sizing: border-box; margin-bottom: 15px; padding: 10px; border: 1px solid #444; background: #222; color: #fff; border-radius: 5px;">
+            <button type="submit" style="width: 100%; padding: 10px; background: #D32F2F; color: white; border: none; cursor: pointer; border-radius: 5px; font-weight: bold; font-size: 1.1rem; transition: 0.3s;">Register</button>
+        </form>
+        <p style="margin-top: 20px; font-size: 0.9rem; color: #aaa;">Already have an account? <a href="/login" style="color: #C0C0C0; text-decoration: none; font-weight: bold;">Login</a></p>
+    </div>
+</body>
+</html>

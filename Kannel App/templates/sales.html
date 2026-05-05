@@ -1,36 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head><title>Sales & Applications</title></head>
-<body style="font-family: 'Segoe UI', sans-serif; margin: 40px; background: #fdfdfd;">
-    <a href="/">← Back to Dashboard</a>
-    <h1>🐾 Puppy Sales & Management</h1>
+<body style="font-family: 'Segoe UI', sans-serif; margin: 40px; background: #0a0a0a; color: #fff;">
+    <a href="/kennel" style="color: #C0C0C0; text-decoration: none;">← Back to Kennel Dashboard</a>
+    <h1 style="color: #fff; border-bottom: 2px solid #D32F2F; padding-bottom: 10px;">🐾 Puppy Sales & Management</h1>
 
-    {% if not current_user.is_authenticated %}
-    <div style="background: #eef2f7; padding: 25px; border-radius: 12px; margin-bottom: 30px; border-left: 5px solid #3498db;">
-        <h3>Interested in a Puppy? Apply Here</h3>
+    {% if not current_user.is_superuser %}
+    <div style="background: #1a1a1a; padding: 25px; border-radius: 12px; margin-bottom: 30px; border: 1px solid #D32F2F;">
+        <h3 style="color: #D32F2F;">Interested in a Puppy? Apply Here</h3>
         <form method="POST">
-            <input type="text" name="client_name" placeholder="Your Full Name" required style="width:100%; margin-bottom:10px; padding:10px;">
-            <input type="text" name="pup_name" value="{{ request.args.get('pup_name', '') }}" placeholder="Puppy Name" required style="width:48%; padding:10px;">
-            <input type="text" name="breed" value="{{ request.args.get('breed', '') }}" placeholder="Breed" style="width:48%; padding:10px;">
-            <textarea name="message" placeholder="Tell us why you want this pup..." style="width:100%; margin-top:10px; height:80px; padding:10px;"></textarea>
-            <button type="submit" style="background:#3498db; color:white; border:none; padding:10px 20px; border-radius:5px; margin-top:10px; cursor:pointer;">Submit Interest</button>
+            <input type="text" name="client_name" placeholder="Your Full Name" required style="width:100%; margin-bottom:10px; padding:10px; background:#222; border:1px solid #444; color:#fff;">
+            <input type="text" name="pup_name" value="{{ request.args.get('pup_name', '') }}" placeholder="Puppy Name" required style="width:48%; padding:10px; background:#222; border:1px solid #444; color:#fff;">
+            <input type="text" name="breed" value="{{ request.args.get('breed', '') }}" placeholder="Breed" style="width:48%; padding:10px; background:#222; border:1px solid #444; color:#fff;">
+            <textarea name="message" placeholder="Tell us why you want this pup..." style="width:100%; margin-top:10px; height:80px; padding:10px; background:#222; border:1px solid #444; color:#fff;"></textarea>
+            <input type="number" step="0.01" name="amount" placeholder="Reservation Deposit Amount (R)" required style="width:100%; margin-top:10px; padding:10px; background:#222; border:1px solid #444; color:#fff;">
+            <button type="submit" style="background:#D32F2F; color:white; border:none; padding:10px 20px; border-radius:5px; margin-top:10px; cursor:pointer; font-weight:bold;">Submit Interest</button>
         </form>
+    </div>
+
+    <div style="background: #1a1a1a; padding: 25px; border-radius: 12px; margin-bottom: 30px; border: 1px solid #C0C0C0;">
+        <h3 style="color: #C0C0C0;">Cancel a Pending Application</h3>
+        <p style="font-size: 0.9rem; color: #aaa;">If you placed an application and wish to cancel it, please enter the Application ID (if you saved it). If you don't have it, contact the admin.</p>
+        <script>
+            function cancelApp() {
+                var appId = document.getElementById('cancel_app_id').value;
+                if(appId) window.location.href = '/cancel_app/' + appId;
+            }
+        </script>
+        <input type="number" id="cancel_app_id" placeholder="Application ID" style="padding:10px; background:#222; border:1px solid #444; color:#fff;">
+        <button type="button" onclick="cancelApp()" style="background:#555; color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer; font-weight:bold;">Cancel Request</button>
     </div>
     {% endif %}
 
-    {% if current_user.is_authenticated %}
-    <div style="background: #fff9db; padding: 20px; border-radius: 12px; margin-bottom: 30px; border: 1px dashed #f1c40f;">
-        <h3>Pending Approval Requests</h3>
-        {% if not apps %} <p>No pending applications at the moment.</p> {% endif %}
+    {% if current_user.is_superuser %}
+    <div style="background: #1a1a1a; padding: 20px; border-radius: 12px; margin-bottom: 30px; border: 1px dashed #C0C0C0;">
+        <h3 style="color: #D32F2F;">Pending Approval Requests</h3>
+        {% if not apps %} <p style="color: #aaa;">No pending applications at the moment.</p> {% endif %}
         {% for a in apps %}
-        <div style="background:white; padding:15px; margin-bottom:10px; border-radius:8px; border:1px solid #ddd; display: flex; justify-content: space-between; align-items: center;">
+        <div style="background:#222; padding:15px; margin-bottom:10px; border-radius:8px; border:1px solid #444; display: flex; justify-content: space-between; align-items: center;">
             <div>
-                <strong>{{ a.client_name }}</strong> wants <strong>{{ a.pup_interest }}</strong><br>
-                <small>"{{ a.message }}"</small>
+                <strong>[ID:{{ a.id }}] {{ a.client_name }}</strong> wants <strong>{{ a.pup_interest }}</strong> (Deposit: R{{ a.amount }})<br>
+                <small style="color: #aaa;">"{{ a.message }}"</small>
             </div>
             <div>
                 <a href="/approve/{{ a.id }}/approve" style="background: #27ae60; color: white; padding: 5px 15px; text-decoration: none; border-radius: 4px; margin-right: 5px;">APPROVE</a>
-                <a href="/approve/{{ a.id }}/decline" style="background: #c0392b; color: white; padding: 5px 15px; text-decoration: none; border-radius: 4px;">DECLINE</a>
+                <a href="/approve/{{ a.id }}/decline" style="background: #D32F2F; color: white; padding: 5px 15px; text-decoration: none; border-radius: 4px;">DECLINE</a>
             </div>
         </div>
         {% endfor %}
@@ -51,18 +65,18 @@
 
     <hr>
 
-    <h3>Confirmed Placement Records</h3>
-    <table border="1" width="100%" style="border-collapse: collapse; text-align: left;">
-        <tr style="background: #2c3e50; color: white;">
+    <h3 style="color: #C0C0C0;">Confirmed Placement Records</h3>
+    <table border="1" width="100%" style="border-collapse: collapse; text-align: left; border-color: #444;">
+        <tr style="background: #111; color: var(--silver);">
             <th style="padding:10px;">Client Name</th>
             <th style="padding:10px;">Puppy Name</th>
-            {% if current_user.is_authenticated %}<th style="padding:10px;">Financials</th>{% endif %}
+            {% if current_user.is_superuser %}<th style="padding:10px;">Financials</th>{% endif %}
         </tr>
         {% for s in sales %}
         <tr>
             <td style="padding:10px;">{{ s.client }}</td>
             <td style="padding:10px;">{{ s.pup_name }} ({{ s.breed }})</td>
-            {% if current_user.is_authenticated %}<td style="padding:10px;">R {{ s.payment }} [{{ s.contract }}]</td>{% endif %}
+            {% if current_user.is_superuser %}<td style="padding:10px;">R {{ s.payment }} [{{ s.contract }}]</td>{% endif %}
         </tr>
         {% endfor %}
     </table>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetShop - Kannel App</title>
+    <style>
+        :root { --black: #0a0a0a; --red: #D32F2F; --silver: #C0C0C0; --white: #FFFFFF; --dark-gray: #1a1a1a; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--black); color: var(--white); }
+        .nav-bar { background: var(--dark-gray); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--red); }
+        .nav-bar h1 { margin: 0; font-size: 1.5rem; color: var(--silver); }
+        .nav-bar h1 span { color: var(--red); }
+        .nav-links a { color: var(--white); text-decoration: none; margin-left: 20px; font-weight: bold; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--red); }
+        .content { padding: 40px; max-width: 1200px; margin: 0 auto; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .product-card { background: var(--dark-gray); border: 1px solid #333; border-radius: 10px; padding: 20px; transition: 0.3s; }
+        .product-card:hover { transform: translateY(-5px); border-color: var(--silver); box-shadow: 0 5px 15px rgba(192, 192, 192, 0.1); }
+        .product-card h3 { color: var(--red); margin-top: 0; font-size: 1.5rem; }
+        .price { font-size: 1.2rem; font-weight: bold; color: var(--silver); margin: 10px 0; }
+        .stock { color: #aaa; font-size: 0.9rem; margin-bottom: 15px; }
+        .buy-form { display: flex; flex-direction: column; gap: 10px; }
+        input[type="text"], input[type="number"] { padding: 10px; border-radius: 5px; border: 1px solid #444; background: #222; color: white; }
+        .btn { background: var(--red); color: white; border: none; padding: 10px; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn:hover { background: #b71c1c; }
+        .admin-panel-btn { display: inline-block; background: var(--silver); color: var(--black); padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; margin-bottom: 30px; transition: 0.3s;}
+        .admin-panel-btn:hover { background: var(--white); }
+        .btn-cancel { background: #555; margin-top: 5px; text-align: center; text-decoration: none; display: block; }
+        .btn-cancel:hover { background: #777; }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <h1>Kannel <span>PetShop</span></h1>
+        <div class="nav-links">
+            <a href="/">← Back to Home</a>
+            <a href="/petshop/cart" style="background: var(--red); padding: 5px 15px; border-radius: 20px;">🛒 Cart ({{ cart_count }})</a>
+        </div>
+    </div>
+    
+    <div class="content">
+        {% if current_user.is_authenticated and current_user.is_superuser %}
+            <a href="/admin/petshop" class="admin-panel-btn">⚙️ Manage PetShop (Admin)</a>
+        {% endif %}
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div style="background: {% if category == 'error' %}#D32F2F{% else %}#27ae60{% endif %}; color: white; padding: 10px; margin-bottom: 15px; border-radius: 5px;">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <h2 style="color: var(--silver); border-bottom: 1px solid var(--red); padding-bottom: 10px;">Available Utilities</h2>
+        
+        <div class="grid">
+            {% if products %}
+                {% for product in products %}
+                <div class="product-card">
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.description }}</p>
+                    <div class="price">${{ product.price }}</div>
+                    <div class="stock">In Stock: {{ product.stock }}</div>
+                    
+                    <form action="/petshop/add_to_cart/{{ product.id }}" method="POST" class="buy-form">
+                        <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" required>
+                        <button type="submit" class="btn">Add to Cart</button>
+                    </form>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>No products available at the moment. Check back later!</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

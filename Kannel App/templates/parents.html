@@ -1,33 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head><title>Pedigree Parents</title></head>
-<body style="font-family: sans-serif; margin: 40px; background: #f0f2f5;">
-    <a href="/">← Back</a>
-    <h1>🐕 Pedigree Index Cards</h1>
+<body style="font-family: 'Segoe UI', sans-serif; margin: 40px; background: #0a0a0a; color: #fff;">
+    <a href="/kennel" style="color: #C0C0C0; text-decoration: none;">← Back to Kennel Dashboard</a>
+    <h1 style="color: #fff; border-bottom: 2px solid #D32F2F; padding-bottom: 10px;">🐕 Pedigree Index Cards</h1>
 
-    {% if current_user.is_authenticated %}
-    <div style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
-        <h3>Add New Parent (Admin)</h3>
+    {% if current_user.is_superuser %}
+    <div style="background: #1a1a1a; padding: 20px; border-radius: 8px; margin-bottom: 30px; border: 1px solid #444;">
+        <h3 style="color: #D32F2F;">Add New Parent (Admin)</h3>
         <form method="POST">
-            <input type="text" name="name" placeholder="Name" required>
-            <select name="role"><option value="Sire">Sire</option><option value="Dam">Dam</option></select>
-            <input type="text" name="breed" placeholder="Breed">
-            <input type="text" name="achievements" placeholder="Achievements">
-            <input type="text" name="health_status" placeholder="Health Status">
-            <textarea name="bio" placeholder="Bio"></textarea>
-            <button type="submit">Add Dog</button>
+            <input type="text" name="name" placeholder="Name" required style="background: #222; border: 1px solid #444; color: #fff; padding: 8px;">
+            <select name="role" style="background: #222; border: 1px solid #444; color: #fff; padding: 8px;"><option value="Sire">Sire</option><option value="Dam">Dam</option></select>
+            <input type="text" name="breed" placeholder="Breed" style="background: #222; border: 1px solid #444; color: #fff; padding: 8px;">
+            <input type="text" name="achievements" placeholder="Achievements" style="background: #222; border: 1px solid #444; color: #fff; padding: 8px;">
+            <input type="text" name="health_status" placeholder="Health Status" style="background: #222; border: 1px solid #444; color: #fff; padding: 8px;">
+            <textarea name="bio" placeholder="Bio" style="background: #222; border: 1px solid #444; color: #fff; padding: 8px;"></textarea>
+            <button type="submit" style="background: #D32F2F; color: #fff; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">Add Dog</button>
         </form>
     </div>
     {% endif %}
 
     <div style="display: flex; gap: 20px; flex-wrap: wrap;">
         {% for p in sires + dams %}
-        <div style="background: white; width: 280px; padding: 20px; border-left: 8px solid #2c3e50; border-radius: 5px;">
-            <small style="color: gray;">{{ p.role }}</small>
-            <h2>{{ p.name }}</h2>
+        <div style="background: #1a1a1a; width: 280px; padding: 20px; border-left: 8px solid #D32F2F; border-radius: 5px; border-top: 1px solid #444; border-right: 1px solid #444; border-bottom: 1px solid #444;">
+            <small style="color: #C0C0C0;">{{ p.role }}</small>
+            <h2 style="color: #D32F2F; margin-top: 5px;">{{ p.name }}</h2>
             <p><strong>Breed:</strong> {{ p.breed }}</p>
-            <p><strong>Health:</strong> {{ p.health_status }}</p>
-            <p><i>{{ p.bio }}</i></p>
+            <p><strong>Health:</strong> <span style="color: #27ae60;">{{ p.health_status }}</span></p>
+            <p style="color: #aaa;"><i>{{ p.bio }}</i></p>
         </div>
         {% endfor %}
     </div>

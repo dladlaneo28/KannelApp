@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetShop Admin - Kannel App</title>
+    <style>
+        :root { --black: #0a0a0a; --red: #D32F2F; --silver: #C0C0C0; --white: #FFFFFF; --dark-gray: #1a1a1a; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--black); color: var(--white); }
+        .nav-bar { background: var(--dark-gray); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--red); }
+        .nav-bar h1 { margin: 0; font-size: 1.5rem; color: var(--silver); }
+        .nav-links a { color: var(--white); text-decoration: none; margin-left: 20px; font-weight: bold; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--red); }
+        .content { padding: 40px; max-width: 1200px; margin: 0 auto; }
+        .panel { background: var(--dark-gray); border: 1px solid #333; border-radius: 10px; padding: 20px; margin-bottom: 40px; }
+        .panel h2 { color: var(--red); margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #333; }
+        th { color: var(--silver); background: #222; }
+        .btn { background: var(--red); color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
+        .btn:hover { opacity: 0.8; }
+        .btn-approve { background: #27ae60; }
+        .btn-decline { background: #e74c3c; }
+        form { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+        input, textarea { padding: 10px; background: #222; border: 1px solid #444; color: white; border-radius: 5px; width: 100%; box-sizing: border-box; }
+        .form-full { grid-column: 1 / -1; }
+        button[type="submit"] { grid-column: 1 / -1; width: max-content; }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <h1>PetShop <span>Admin Panel</span></h1>
+        <div class="nav-links">
+            <a href="/petshop">← Back to PetShop</a>
+            <a href="/kennel">Kennel Dashboard</a>
+        </div>
+    </div>
+    
+    <div class="content">
+        <div class="panel">
+            <h2>Add New Product (Stock)</h2>
+            <form action="/admin/petshop" method="POST">
+                <input type="text" name="name" placeholder="Product Name" required>
+                <input type="number" step="0.01" name="price" placeholder="Price ($)" required>
+                <textarea name="description" placeholder="Description" rows="3" class="form-full" required></textarea>
+                <input type="number" name="stock" placeholder="Initial Stock" required>
+                <button type="submit" class="btn">Add Product</button>
+            </form>
+        </div>
+
+        <div class="panel">
+            <h2>Manage Cart Orders</h2>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div style="background: {% if category == 'error' %}#D32F2F{% else %}#27ae60{% endif %}; color: white; padding: 10px; margin-bottom: 15px; border-radius: 5px;">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
+            <table>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Client</th>
+                    <th>Items</th>
+                    <th>Total Price</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                {% for order in orders %}
+                <tr>
+                    <td>#{{ order.id }}</td>
+                    <td>{{ order.client_name }}</td>
+                    <td>
+                        <ul style="margin: 0; padding-left: 15px; color: #aaa; font-size: 0.9rem;">
+                            {% for item in order.items %}
+                                <li>{{ item.quantity }}x {{ item.product.name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td><strong style="color: var(--silver);">${{ order.total_price }}</strong></td>
+                    <td>
+                        {% if order.status == 'Pending' %}
+                            <span style="color: orange;">{{ order.status }}</span>
+                        {% elif order.status == 'Approved' %}
+                            <span style="color: #27ae60;">{{ order.status }}</span>
+                        {% else %}
+                            <span style="color: #e74c3c;">{{ order.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if order.status == 'Pending' %}
+                        <a href="/admin/petshop/order/{{ order.id }}/approve" class="btn btn-approve">Approve</a>
+                        <a href="/admin/petshop/order/{{ order.id }}/decline" class="btn btn-decline">Decline</a>
+                        {% else %}
+                        -
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div class="panel">
+            <h2>Current Inventory</h2>
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Stock Remaining</th>
+                </tr>
+                {% for product in products %}
+                <tr>
+                    <td>{{ product.id }}</td>
+                    <td>{{ product.name }}</td>
+                    <td>${{ product.price }}</td>
+                    <td>{{ product.stock }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</body>
+</html>

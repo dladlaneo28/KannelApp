@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head><title>Feeding & Age</title></head>
-<body style="font-family: sans-serif; margin: 40px; background: #f4fbf9;">
-    <a href="/">← Back</a>
-    <h1>🥣 Feeding & Age Manager</h1>
+<body style="font-family: 'Segoe UI', sans-serif; margin: 40px; background: #0a0a0a; color: #fff;">
+    <a href="/kennel" style="color: #C0C0C0; text-decoration: none;">← Back to Kennel Dashboard</a>
+    <h1 style="color: #fff; border-bottom: 2px solid #D32F2F; padding-bottom: 10px;">🥣 Feeding & Age Manager</h1>
 
-    <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-        <h3>New Dog Profile</h3>
+    <div style="background: #1a1a1a; padding: 20px; border-radius: 10px; border: 1px solid #444;">
+        <h3 style="color: #D32F2F;">New Dog Profile</h3>
         <form method="POST">
-            <input type="text" name="name" placeholder="Dog Name" required>
-            <input type="text" name="breed" placeholder="Breed">
-            <label style="margin-left: 10px;">Birth Date:</label>
-            <input type="date" name="birth_date" required>
+            <input type="text" name="name" placeholder="Dog Name" required style="background: #222; border: 1px solid #444; color: #fff; padding: 8px;">
+            <input type="text" name="breed" placeholder="Breed" style="background: #222; border: 1px solid #444; color: #fff; padding: 8px;">
+            <label style="margin-left: 10px; color: #C0C0C0;">Birth Date:</label>
+            <input type="date" name="birth_date" required style="background: #222; border: 1px solid #444; color: #fff; padding: 8px;">
             <br><br>
-            <input type="text" name="food" placeholder="Food Brand/Type" required>
-            <input type="text" name="schedule" placeholder="Schedule (e.g. 7am, 6pm)" required>
-            <button type="submit" style="background: #16a085; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">Save Profile</button>
+            <input type="text" name="food" placeholder="Food Brand/Type" required style="background: #222; border: 1px solid #444; color: #fff; padding: 8px;">
+            <input type="text" name="schedule" placeholder="Schedule (e.g. 7am, 6pm)" required style="background: #222; border: 1px solid #444; color: #fff; padding: 8px;">
+            <button type="submit" style="background: #D32F2F; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">Save Profile</button>
         </form>
     </div>
 
-    <table border="1" width="100%" style="margin-top: 30px; border-collapse: collapse;">
-        <tr style="background: #16a085; color: white;">
+    <table border="1" width="100%" style="margin-top: 30px; border-collapse: collapse; border-color: #444;">
+        <tr style="background: #111; color: var(--silver);">
             <th style="padding: 12px;">Name</th>
             <th style="padding: 12px;">Age</th>
             <th style="padding: 12px;">Food Type</th>

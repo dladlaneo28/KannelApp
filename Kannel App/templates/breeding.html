@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head><title>Breeding</title></head>
-<body style="font-family: sans-serif; margin: 40px;">
-    <a href="/">← Back</a>
-    <h1>⏳ Breeding Tracker</h1>
+<body style="font-family: 'Segoe UI', sans-serif; margin: 40px; background: #0a0a0a; color: #fff;">
+    <a href="/kennel" style="color: #C0C0C0; text-decoration: none;">← Back to Kennel Dashboard</a>
+    <h1 style="color: #fff; border-bottom: 2px solid #D32F2F; padding-bottom: 10px;">⏳ Breeding Tracker</h1>
 
-    {% if current_user.is_authenticated %}
-    <form method="POST">
-        <input type="text" name="dam_name" placeholder="Dam">
-        <input type="text" name="sire_name" placeholder="Sire">
-        <input type="date" name="mating_date">
-        <button type="submit">Log Breeding</button>
+    {% if current_user.is_superuser %}
+    <form method="POST" style="background: #1a1a1a; padding: 20px; border-radius: 8px; border: 1px solid #444; margin-bottom: 20px;">
+        <input type="text" name="dam_name" placeholder="Dam" style="background: #222; border: 1px solid #444; color: #fff; padding: 8px; margin-right: 10px;">
+        <input type="text" name="sire_name" placeholder="Sire" style="background: #222; border: 1px solid #444; color: #fff; padding: 8px; margin-right: 10px;">
+        <input type="date" name="mating_date" style="background: #222; border: 1px solid #444; color: #fff; padding: 8px; margin-right: 10px;">
+        <button type="submit" style="background: #D32F2F; color: white; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer;">Log Breeding</button>
     </form>
     {% endif %}
 
-    <ul>
+    <ul style="list-style-type: none; padding: 0;">
     {% for b in records %}
-        <li><strong>{{ b.dam_name }}</strong> x {{ b.sire_name }} | Due: <span style="color: red;">{{ b.due_date }}</span> ({{ b.status }})</li>
+        <li style="background: #1a1a1a; padding: 15px; border: 1px solid #444; border-radius: 8px; margin-bottom: 10px;">
+            <strong style="color: #C0C0C0;">{{ b.dam_name }}</strong> x <strong style="color: #C0C0C0;">{{ b.sire_name }}</strong> | Due: <span style="color: #D32F2F; font-weight: bold;">{{ b.due_date }}</span> <span style="color: #aaa;">({{ b.status }})</span>
+        </li>
     {% endfor %}
     </ul>
 </body>
